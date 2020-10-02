@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-
+import { Text, View, StyleSheet,Dimensions } from 'react-native';
+import MapView from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 export default class App extends React.Component {
@@ -31,22 +31,43 @@ export default class App extends React.Component {
 
    const location = await Location.getCurrentPositionAsync({});
    this.setState({ locationResult: JSON.stringify(location) });
-   
+   // Location: {this.state.locationResult}
    // Center the map on the location we just fetched.
     this.setState({mapRegion: { latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }});
   };
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         
-        <Text>
-          Location: {this.state.locationResult}
-        </Text>
+       
+        
+       
+        <MapView
+          style={styles.mapStyle}
+          region={this.state.mapRegion}
+          onRegionChange={this.handleMapRegionChange}
+        />
       </View>
+   
         
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+});
+
+
 
 
